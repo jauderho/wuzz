@@ -12,7 +12,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.13
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nsf/termbox-go v1.1.1
-	github.com/nwidger/jsoncolor v0.3.0
+	github.com/nwidger/jsoncolor v0.3.1
 	github.com/tidwall/gjson v1.11.0
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
 	golang.org/x/net v0.0.0-20211105192438-b53810dc28af
