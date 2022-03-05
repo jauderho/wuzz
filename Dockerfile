@@ -5,7 +5,7 @@ WORKDIR /out
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 
-FROM golang:1.14-alpine3.12 AS builder
+FROM golang:1.16.5-alpine3.12 AS builder
 
 # Build wuzz
 WORKDIR /out
