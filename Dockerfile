@@ -1,4 +1,4 @@
-FROM alpine:3.15.2 AS permissions-giver
+FROM alpine:3.15.3 AS permissions-giver
 
 # Make sure docker-entrypoint.sh is executable, regardless of the build host.
 WORKDIR /out
@@ -12,14 +12,14 @@ WORKDIR /out
 COPY . .
 RUN go build .
 
-FROM alpine:3.15.2 AS organizer
+FROM alpine:3.15.3 AS organizer
 
 # Prepare executables
 WORKDIR /out
 COPY --from=builder /out/wuzz .
 COPY --from=permissions-giver /out/docker-entrypoint.sh .
 
-FROM alpine:3.15.2 AS runner
+FROM alpine:3.15.3 AS runner
 WORKDIR /wuzz
 COPY --from=organizer /out /usr/local/bin
 ENTRYPOINT [ "docker-entrypoint.sh" ]
