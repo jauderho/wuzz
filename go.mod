@@ -15,7 +15,7 @@ require (
 	github.com/nwidger/jsoncolor v0.3.1
 	github.com/tidwall/gjson v1.14.1
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
-	golang.org/x/net v0.0.0-20220531201128-c960675eff93
+	golang.org/x/net v0.0.0-20220607020251-c690dde0001d
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 )
 
