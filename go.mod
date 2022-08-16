@@ -13,7 +13,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nsf/termbox-go v1.1.1
 	github.com/nwidger/jsoncolor v0.3.1
-	github.com/tidwall/gjson v1.14.2
+	github.com/tidwall/gjson v1.14.3
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
 	golang.org/x/net v0.0.0-20220728211354-c7608f3a8462
 	golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
