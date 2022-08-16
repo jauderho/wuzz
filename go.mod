@@ -8,21 +8,21 @@ require (
 	github.com/alessio/shellescape v1.4.1
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/jroimartin/gocui v0.5.0
-	github.com/mattn/go-colorable v0.1.12 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-runewidth v0.0.13
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nsf/termbox-go v1.1.1
 	github.com/nwidger/jsoncolor v0.3.1
 	github.com/tidwall/gjson v1.14.3
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
-	golang.org/x/net v0.0.0-20220728211354-c7608f3a8462
-	golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
+	golang.org/x/net v0.0.0-20220812174116-3211cb980234
+	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 )
 
 require (
 	github.com/andybalholm/cascadia v1.3.1 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/rivo/uniseg v0.3.1 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/rivo/uniseg v0.3.4 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 )
