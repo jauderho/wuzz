@@ -15,14 +15,14 @@ require (
 	github.com/nwidger/jsoncolor v0.3.1
 	github.com/tidwall/gjson v1.14.3
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
-	golang.org/x/net v0.0.0-20220906165146-f3363e06e74c
-	golang.org/x/sys v0.0.0-20220906165534-d0df966e6959 // indirect
+	golang.org/x/net v0.0.0-20220909164309-bea034e7d591
+	golang.org/x/sys v0.0.0-20220913175220-63ea55921009 // indirect
 )
 
 require (
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
-	github.com/rivo/uniseg v0.3.4 // indirect
+	github.com/rivo/uniseg v0.4.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 )
