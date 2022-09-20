@@ -9,7 +9,7 @@ require (
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/jroimartin/gocui v0.5.0
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-runewidth v0.0.13
+	github.com/mattn/go-runewidth v0.0.14
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nsf/termbox-go v1.1.1
 	github.com/nwidger/jsoncolor v0.3.1
