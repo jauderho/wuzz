@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/BurntSushi/toml v1.2.1
-	github.com/PuerkitoBio/goquery v1.8.0
+	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/alessio/shellescape v1.4.1
 	github.com/fatih/color v1.14.1 // indirect
 	github.com/jroimartin/gocui v0.5.0
