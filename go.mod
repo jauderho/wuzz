@@ -20,7 +20,7 @@ require (
 )
 
 require (
-	github.com/andybalholm/cascadia v1.3.1 // indirect
+	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
