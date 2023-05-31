@@ -3,7 +3,7 @@ module github.com/asciimoo/wuzz
 go 1.20
 
 require (
-	github.com/BurntSushi/toml v1.2.1
+	github.com/BurntSushi/toml v1.3.0
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/alessio/shellescape v1.4.1
 	github.com/fatih/color v1.15.0 // indirect
