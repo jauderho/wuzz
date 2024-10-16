@@ -27,7 +27,7 @@ import (
 	"github.com/asciimoo/wuzz/config"
 	"github.com/asciimoo/wuzz/formatter"
 
-	"github.com/alessio/shellescape"
+	"al.essio.dev/pkg/shellescape"
 	"github.com/jroimartin/gocui"
 	"github.com/mattn/go-runewidth"
 	"github.com/nsf/termbox-go"
