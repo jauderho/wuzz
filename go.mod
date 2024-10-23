@@ -7,7 +7,7 @@ toolchain go1.23.2
 require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/PuerkitoBio/goquery v1.10.0
-	github.com/fatih/color v1.17.0 // indirect
+	github.com/fatih/color v1.18.0 // indirect
 	github.com/jroimartin/gocui v0.5.0
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-runewidth v0.0.16
