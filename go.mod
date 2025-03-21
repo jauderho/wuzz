@@ -1,11 +1,11 @@
 module github.com/asciimoo/wuzz
 
-go 1.23
+go 1.23.0
 
 toolchain go1.23.2
 
 require (
-	github.com/BurntSushi/toml v1.4.0
+	github.com/BurntSushi/toml v1.5.0
 	github.com/PuerkitoBio/goquery v1.10.2
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/jroimartin/gocui v0.5.0
@@ -16,11 +16,11 @@ require (
 	github.com/nwidger/jsoncolor v0.3.2
 	github.com/tidwall/gjson v1.18.0
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
-	golang.org/x/net v0.35.0
-	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/net v0.37.0
+	golang.org/x/sys v0.31.0 // indirect
 )
 
-require al.essio.dev/pkg/shellescape v1.5.1
+require al.essio.dev/pkg/shellescape v1.6.0
 
 require (
 	github.com/andybalholm/cascadia v1.3.3 // indirect
