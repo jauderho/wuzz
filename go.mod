@@ -10,7 +10,7 @@ require (
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/jroimartin/gocui v0.5.0
 	github.com/mattn/go-colorable v0.1.14 // indirect
-	github.com/mattn/go-runewidth v0.0.17
+	github.com/mattn/go-runewidth v0.0.19
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nsf/termbox-go v1.1.1
 	github.com/nwidger/jsoncolor v0.3.2
@@ -24,8 +24,8 @@ require al.essio.dev/pkg/shellescape v1.6.0
 
 require (
 	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 )
