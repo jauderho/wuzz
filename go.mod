@@ -5,7 +5,7 @@ go 1.24.0
 toolchain go1.24.1
 
 require (
-	github.com/BurntSushi/toml v1.5.0
+	github.com/BurntSushi/toml v1.6.0
 	github.com/PuerkitoBio/goquery v1.11.0
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/jroimartin/gocui v0.5.0
