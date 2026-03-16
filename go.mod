@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/BurntSushi/toml v1.6.0
-	github.com/PuerkitoBio/goquery v1.11.0
+	github.com/PuerkitoBio/goquery v1.12.0
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/jroimartin/gocui v0.5.0
 	github.com/mattn/go-colorable v0.1.14 // indirect
