@@ -10,7 +10,7 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-runewidth v0.0.28
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/nsf/termbox-go v1.1.1
+	github.com/nsf/termbox-go v1.1.2
 	github.com/nwidger/jsoncolor v0.3.2
 	github.com/tidwall/gjson v1.19.0
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
