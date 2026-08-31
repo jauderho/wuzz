@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/BurntSushi/toml v1.6.0
-	github.com/PuerkitoBio/goquery v1.12.0
+	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/fatih/color v1.19.0 // indirect
 	github.com/jroimartin/gocui v0.5.0
 	github.com/mattn/go-colorable v0.1.14 // indirect
@@ -21,7 +21,7 @@ require (
 require al.essio.dev/pkg/shellescape v1.6.0
 
 require (
-	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/andybalholm/cascadia v1.3.4 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
