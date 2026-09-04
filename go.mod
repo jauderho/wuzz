@@ -18,7 +18,7 @@ require (
 	golang.org/x/sys v0.47.0 // indirect
 )
 
-require al.essio.dev/pkg/shellescape v1.6.0
+require al.essio.dev/pkg/shellescape v1.6.1
 
 require (
 	github.com/andybalholm/cascadia v1.3.4 // indirect
