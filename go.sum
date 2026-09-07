@@ -23,8 +23,8 @@ github.com/mattn/go-isatty v0.0.11/go.mod h1:PhnuNfih5lzO57/f3n+odYbM4JtupLOxQOA
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
-github.com/mattn/go-runewidth v0.0.28 h1:rPyg2ybwEKPebvpzVWe1gKBkH8EQFkxO4Y0hjBeLaBU=
-github.com/mattn/go-runewidth v0.0.28/go.mod h1:3qAiGCV4Koz/yuveO58qUefmUTRm8r0IGEXZ9jeHp/8=
+github.com/mattn/go-runewidth v0.0.29 h1:3oGF3R/S2N9DQ3ptftzVIvg2eicmojCzlwBEmqEPDfQ=
+github.com/mattn/go-runewidth v0.0.29/go.mod h1:3qAiGCV4Koz/yuveO58qUefmUTRm8r0IGEXZ9jeHp/8=
 github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=
 github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
 github.com/nsf/termbox-go v1.1.1/go.mod h1:T0cTdVuOwf7pHQNtfhnEbzHbcNyCEcVU4YPpouCbVxo=
