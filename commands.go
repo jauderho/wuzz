@@ -8,8 +8,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/jroimartin/gocui"
-	"github.com/nsf/termbox-go"
+	"github.com/awesome-gocui/gocui"
 )
 
 type CommandFunc func(*gocui.Gui, *gocui.View) error
@@ -116,6 +115,17 @@ var COMMANDS map[string]func(string, *App) CommandFunc = map[string]func(string,
 	"redirectRestriction": func(_ string, a *App) CommandFunc {
 		return func(g *gocui.Gui, _ *gocui.View) error {
 			a.config.General.FollowRedirects = !a.config.General.FollowRedirects
+			return nil
+		}
+	},
+	"clearTabs": func(_ string, a *App) CommandFunc {
+		return func(g *gocui.Gui, _ *gocui.View) error {
+			if a.currentPopup != "" {
+				return nil
+			}
+
+			a.restoreRequest(g, 0, true)
+			g.SetCurrentView(URL_VIEW)
 			return nil
 		}
 	},
@@ -236,15 +246,19 @@ func openEditor(g *gocui.Gui, v *gocui.View, editor string) error {
 		return nil
 	}
 
+	gocui.Suspend()
+
 	cmd := exec.Command(editor, file.Name())
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
+
+	gocui.Resume()
+
 	// sync termbox to reset console settings
 	// this is required because the external editor can modify the console
-	defer g.Update(func(_ *gocui.Gui) error {
-		termbox.Sync()
+	defer g.Update(func(gui *gocui.Gui) error {
 		return nil
 	})
 	if err != nil {

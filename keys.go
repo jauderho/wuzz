@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jroimartin/gocui"
+	"github.com/awesome-gocui/gocui"
 )
 
 var KEYS = map[string]gocui.Key{

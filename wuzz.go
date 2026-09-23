@@ -10,6 +10,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"mime"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -27,10 +28,9 @@ import (
 	"github.com/asciimoo/wuzz/config"
 	"github.com/asciimoo/wuzz/formatter"
 
-	"al.essio.dev/pkg/shellescape"
-	"github.com/jroimartin/gocui"
+	"github.com/alessio/shellescape"
+	"github.com/awesome-gocui/gocui"
 	"github.com/mattn/go-runewidth"
-	"github.com/nsf/termbox-go"
 )
 
 const VERSION = "0.5.0"
@@ -549,7 +549,8 @@ func setView(g *gocui.Gui, viewName string) (*gocui.View, error) {
 		position.x0.getCoordinate(maxX+1),
 		position.y0.getCoordinate(maxY+1),
 		position.x1.getCoordinate(maxX+1),
-		position.y1.getCoordinate(maxY+1))
+		position.y1.getCoordinate(maxY+1),
+		0)
 }
 
 func setViewProperties(v *gocui.View, name string) {
@@ -770,22 +771,15 @@ func (a *App) SubmitRequest(g *gocui.Gui, _ *gocui.View) error {
 		r.Method = getViewValue(g, REQUEST_METHOD_VIEW)
 
 		// set headers
-		headers := http.Header{}
-		headers.Set("User-Agent", "")
 		r.Headers = getViewValue(g, REQUEST_HEADERS_VIEW)
-		for _, header := range strings.Split(r.Headers, "\n") {
-			if header != "" {
-				header_parts := strings.SplitN(header, ": ", 2)
-				if len(header_parts) != 2 {
-					g.Update(func(g *gocui.Gui) error {
-						vrb, _ := g.View(RESPONSE_BODY_VIEW)
-						fmt.Fprintf(vrb, "Invalid header: %v", header)
-						return nil
-					})
-					return nil
-				}
-				headers.Set(header_parts[0], header_parts[1])
-			}
+		headers, err := parseRequestHeaders(r.Headers)
+		if err != nil {
+			g.Update(func(g *gocui.Gui) error {
+				vrb, _ := g.View(RESPONSE_BODY_VIEW)
+				fmt.Fprint(vrb, err)
+				return nil
+			})
+			return nil
 		}
 
 		var body io.Reader
@@ -794,50 +788,22 @@ func (a *App) SubmitRequest(g *gocui.Gui, _ *gocui.View) error {
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
 			bodyStr := getViewValue(g, REQUEST_DATA_VIEW)
 			r.Data = bodyStr
-			if headers.Get("Content-Type") != "multipart/form-data" {
+			if !isMultipartFormData(headers.Get("Content-Type")) {
 				if headers.Get("Content-Type") == "application/x-www-form-urlencoded" {
 					bodyStr = strings.Replace(bodyStr, "\n", "&", -1)
 				}
 				body = bytes.NewBufferString(bodyStr)
 			} else {
-				var bodyBytes bytes.Buffer
-				multiWriter := multipart.NewWriter(&bodyBytes)
-				defer multiWriter.Close()
-				postData, err := url.ParseQuery(strings.Replace(getViewValue(g, REQUEST_DATA_VIEW), "\n", "&", -1))
+				bodyBytes, contentType, err := buildMultipartBody(bodyStr)
 				if err != nil {
+					g.Update(func(g *gocui.Gui) error {
+						vrb, _ := g.View(RESPONSE_BODY_VIEW)
+						fmt.Fprintf(vrb, "Error: %v", err)
+						return nil
+					})
 					return err
 				}
-				for postKey, postValues := range postData {
-					for i := range postValues {
-						if len([]rune(postValues[i])) > 0 && postValues[i][0] == '@' {
-							file, err := os.Open(postValues[i][1:])
-							if err != nil {
-								g.Update(func(g *gocui.Gui) error {
-									vrb, _ := g.View(RESPONSE_BODY_VIEW)
-									fmt.Fprintf(vrb, "Error: %v", err)
-									return nil
-								})
-								return err
-							}
-							defer file.Close()
-							fw, err := multiWriter.CreateFormFile(postKey, path.Base(postValues[i][1:]))
-							if err != nil {
-								return err
-							}
-							if _, err := io.Copy(fw, file); err != nil {
-								return err
-							}
-						} else {
-							fw, err := multiWriter.CreateFormField(postKey)
-							if err != nil {
-								return err
-							}
-							if _, err := fw.Write([]byte(postValues[i])); err != nil {
-								return err
-							}
-						}
-					}
-				}
+				headers.Set("Content-Type", contentType)
 				body = bytes.NewReader(bodyBytes.Bytes())
 			}
 		}
@@ -1103,6 +1069,16 @@ func (a *App) SetKeys(g *gocui.Gui) error {
 		return nil
 	})
 
+	g.SetKeybinding(ALL_VIEWS, gocui.KeyCtrlL, gocui.ModNone, func(g *gocui.Gui, v *gocui.View) error {
+		if a.currentPopup != "" {
+			return nil
+		}
+
+		a.restoreRequest(g, 0, true)
+		g.SetCurrentView(URL_VIEW)
+		return nil
+	})
+
 	g.SetKeybinding(REQUEST_METHOD_VIEW, gocui.KeyEnter, gocui.ModNone, a.ToggleMethodList)
 
 	cursDown := func(g *gocui.Gui, v *gocui.View) error {
@@ -1127,7 +1103,7 @@ func (a *App) SetKeys(g *gocui.Gui) error {
 		if len(a.history) <= cy {
 			return nil
 		}
-		a.restoreRequest(g, cy)
+		a.restoreRequest(g, cy, false)
 		return nil
 	})
 
@@ -1198,7 +1174,7 @@ func (a *App) CreatePopupView(name string, width, height int, g *gocui.Gui) (v *
 	if width > maxX-4 {
 		width = maxX - 4
 	}
-	v, err = g.SetView(name, maxX/2-width/2-1, maxY/2-height/2-1, maxX/2+width/2, maxY/2+height/2+1)
+	v, err = g.SetView(name, maxX/2-width/2-1, maxY/2-height/2-1, maxX/2+width/2, maxY/2+height/2+1, 0)
 	if err != nil && err != gocui.ErrUnknownView {
 		return
 	}
@@ -1324,7 +1300,7 @@ func (a *App) SaveRequest(g *gocui.Gui, _ *gocui.View) (err error) {
 
 	popup.Title = VIEW_TITLES[SAVE_REQUEST_FORMAT_DIALOG_VIEW]
 
-	// Populate the popup witht the available formats
+	// Populate the popup with the available formats
 	for _, r := range EXPORT_FORMATS {
 		fmt.Fprintln(popup, r.name)
 	}
@@ -1446,13 +1422,19 @@ func (a *App) OpenSaveResultView(saveResult string, g *gocui.Gui) (err error) {
 	return err
 }
 
-func (a *App) restoreRequest(g *gocui.Gui, idx int) {
-	if idx < 0 || idx >= len(a.history) {
+func (a *App) restoreRequest(g *gocui.Gui, idx int, isCleanToggle bool) {
+	if (idx < 0 || idx >= len(a.history)) && !isCleanToggle {
 		return
 	}
-	a.closePopup(g, HISTORY_VIEW)
-	a.historyIndex = idx
-	r := a.history[idx]
+	r := &Request{
+		Url:    fmt.Sprintf("%s://", a.config.General.DefaultURLScheme),
+		Method: http.MethodGet,
+	}
+	if !isCleanToggle {
+		a.closePopup(g, HISTORY_VIEW)
+		a.historyIndex = idx
+		r = a.history[idx]
+	}
 
 	v, _ := g.View(URL_VIEW)
 	setViewTextAndCursor(v, r.Url)
@@ -1472,8 +1454,13 @@ func (a *App) restoreRequest(g *gocui.Gui, idx int) {
 	v, _ = g.View(RESPONSE_HEADERS_VIEW)
 	setViewTextAndCursor(v, r.ResponseHeaders)
 
-	a.PrintBody(g)
-
+	switch isCleanToggle {
+	case true:
+		v, _ = g.View(RESPONSE_BODY_VIEW)
+		setViewTextAndCursor(v, "")
+	default:
+		a.PrintBody(g)
+	}
 }
 
 func (a *App) LoadConfig(configPath string) error {
@@ -1506,6 +1493,74 @@ func (a *App) LoadConfig(configPath string) error {
 	}
 	a.statusLine = sl
 	return nil
+}
+
+func isMultipartFormData(contentType string) bool {
+	mediaType, _, err := mime.ParseMediaType(contentType)
+	return err == nil && mediaType == config.ContentTypes["multipart"]
+}
+
+func parseRequestHeaders(data string) (http.Header, error) {
+	headers := http.Header{}
+	for _, header := range strings.Split(data, "\n") {
+		if header == "" {
+			continue
+		}
+		headerParts := strings.SplitN(header, ": ", 2)
+		if len(headerParts) != 2 {
+			return nil, fmt.Errorf("Invalid header: %v", header)
+		}
+		headers.Add(headerParts[0], headerParts[1])
+	}
+
+	if _, found := headers["User-Agent"]; !found {
+		headers.Set("User-Agent", "")
+	}
+	return headers, nil
+}
+
+func buildMultipartBody(data string) (*bytes.Buffer, string, error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	postData, err := url.ParseQuery(strings.ReplaceAll(data, "\n", "&"))
+	if err != nil {
+		return nil, "", err
+	}
+
+	for postKey, postValues := range postData {
+		for _, postValue := range postValues {
+			if strings.HasPrefix(postValue, "@") {
+				if err := writeMultipartFile(writer, postKey, strings.TrimPrefix(postValue, "@")); err != nil {
+					return nil, "", err
+				}
+				continue
+			}
+			if err := writer.WriteField(postKey, postValue); err != nil {
+				return nil, "", err
+			}
+		}
+	}
+
+	contentType := writer.FormDataContentType()
+	if err := writer.Close(); err != nil {
+		return nil, "", err
+	}
+	return body, contentType, nil
+}
+
+func writeMultipartFile(writer *multipart.Writer, fieldName, filePath string) error {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	fileWriter, err := writer.CreateFormFile(fieldName, path.Base(filePath))
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(fileWriter, file)
+	return err
 }
 
 func (a *App) ParseArgs(g *gocui.Gui, args []string) error {
@@ -1670,8 +1725,7 @@ func (a *App) ParseArgs(g *gocui.Gui, args []string) error {
 			form_str := args[arg_index]
 			content_type = "multipart"
 			set_data = true
-			vdata, _ := g.View(REQUEST_DATA_VIEW)
-			setViewTextAndCursor(vdata, form_str)
+			body_data = append(body_data, form_str)
 		case "-f", "--file":
 			if arg_index == args_len-1 {
 				return errors.New("-f or --file requires a file path be provided as an argument")
@@ -1845,6 +1899,9 @@ func main() {
 			fmt.Printf("wuzz %v\n", VERSION)
 			return
 		case "-c", "--config":
+			if i == len(os.Args)-1 {
+				log.Fatal("No config file specified")
+			}
 			configPath = os.Args[i+1]
 			args = append(os.Args[:i], os.Args[i+2:]...)
 			if _, err := os.Stat(configPath); os.IsNotExist(err) {
@@ -1854,8 +1911,8 @@ func main() {
 	}
 	var g *gocui.Gui
 	var err error
-	for _, outputMode := range []gocui.OutputMode{gocui.Output256, gocui.OutputNormal, gocui.OutputMode(termbox.OutputGrayscale)} {
-		g, err = gocui.NewGui(outputMode)
+	for _, outputMode := range []gocui.OutputMode{gocui.Output256, gocui.OutputNormal} {
+		g, err = gocui.NewGui(outputMode, true)
 		if err == nil {
 			break
 		}
