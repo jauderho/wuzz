@@ -10,7 +10,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.30
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nwidger/jsoncolor v0.3.2
-	github.com/tidwall/gjson v1.19.1
+	github.com/tidwall/gjson v1.20.0
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
 	golang.org/x/net v0.59.0
 )
