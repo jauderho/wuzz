@@ -12,7 +12,7 @@ require (
 	github.com/nwidger/jsoncolor v0.3.2
 	github.com/tidwall/gjson v1.20.0
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
-	golang.org/x/net v0.61.0
+	golang.org/x/net v0.62.0
 )
 
 require (
