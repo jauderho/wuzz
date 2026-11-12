@@ -10,7 +10,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.31
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nwidger/jsoncolor v0.3.2
-	github.com/tidwall/gjson v1.20.1
+	github.com/tidwall/gjson v1.20.2
 	github.com/x86kernel/htmlcolor v0.0.0-20190529101448-c589f58466d0
 	golang.org/x/net v0.62.0
 )
@@ -26,7 +26,7 @@ require (
 	github.com/mattn/go-isatty v0.0.24 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
-	github.com/tidwall/pretty v1.2.1 // indirect
+	github.com/tidwall/pretty v1.3.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/term v0.47.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
